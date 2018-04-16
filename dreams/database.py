@@ -52,15 +52,17 @@ class Article(db.Model):
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     title = db.Column('title', db.String(), nullable=False)
     content = db.Column('content', db.Text, nullable=False)
-    img_url = db.Column('img_url', db.String(), nullable=False)
+    # img_url = db.Column('img_url', db.String(), nullable=False)
     comments = db.relationship('Comment', backref='comments')
     idcategory = db.Column('idcategory', db.Integer, db.ForeignKey('categories.idcategory'), nullable=False)
+    idphoto = db.Column('idphoto', db.Integer, db.ForeignKey('photos.idphoto'))
 
-    def __init__(self, title, content, img_url, idcategory):
+    def __init__(self, title, content,  idcategory, idphoto):
         self.title = title
         self.content = content
-        self.img_url =img_url
+        # self.img_url =img_url
         self.idcategory = idcategory
+        self.idphoto = idphoto
 
 
 class Comment(db.Model):
@@ -81,5 +83,13 @@ class Subscribers(db.Model):
         self.name = name
         self.email = email
 
+class Photos(db.Model):
+    __tablename__ = 'photos'
+    idphoto = db.Column('idphoto', db.Integer, primary_key=True, autoincrement=True)
+    photoname = db.Column('photoname', db.VARCHAR(300), nullable=False)
+    data = db.Column('data', db.LargeBinary, nullable=False)
 
+    def __init__(self, photoname, data):
+        self.data = data
+        self.photoname = photoname
 

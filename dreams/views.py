@@ -1,5 +1,5 @@
 from flask import render_template, request, flash, redirect, url_for, session, abort
-from dreams import app, bcrypt, database, ALLOWED_EXTENSIONS
+from dreams import app, bcrypt, database
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from dreams import forms
 from flask_sqlalchemy import SQLAlchemy
@@ -16,10 +16,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 app.secret_key = os.urandom(24)
 
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -157,13 +153,19 @@ def posts():
     form = forms.ArticleForm()
     title = form.title.data
     content = form.content.data
-    url = form.img_url.data
+    # url = form.img_url.data
     category =form.category.data
 
     if form.validate():
+        file = request.files['image']
+        newFile = database.Photos(photoname=file.filename, data=file.read())
+        db.session.add(newFile)
+        db.session.commit()
+        phot = 'select idphoto from photos order by idphoto desc limit 1'
+        idphoto = db.engine.execute(phot).scalar()
         id = 'SELECT idcategory from categories where category_name =%s'
         idcategory = db.engine.execute(id, category).scalar()
-        new_article = database.Article(title=title, content=content, img_url=url, idcategory=idcategory)
+        new_article = database.Article(title=title, content=content, idphoto=idphoto, idcategory=idcategory)
         db.session.add(new_article)
         db.session.commit()
 
@@ -197,10 +199,10 @@ def posty():
         return render_template('/guest/posty.html', dat=res, data=data)
 
 
-@app.route('/<category>')
-def category(category):
+@app.route('/<category_slug>')
+def category(category_slug):
     db.engine.connect()
-    print(category)
+
     query = 'SELECT * FROM articles where idcategory=%s ORDER BY id DESC'
     query2 = 'SELECT idcategory from categories where (category_name)=%s '
     exc = db.engine.execute(query2, category)
@@ -231,8 +233,8 @@ def post_id(id_postu):
     content = 'SELECT content FROM articles WHERE id=%s'
     result_content = db.engine.execute(content, id_postu).scalar()
 
-    img_url = 'SELECT img_url FROM articles WHERE id=%s'
-    result_img = db.engine.execute(img_url, id_postu).scalar()
+    # img_url = 'SELECT img_url FROM articles WHERE id=%s'
+    # result_img = db.engine.execute(img_url, id_postu).scalar()
 
     query = 'SELECT * FROM comments WHERE id_article=%s'
 
@@ -242,13 +244,13 @@ def post_id(id_postu):
 
     data = result.fetchall()
     if current_user.is_anonymous:
-        return render_template('/guest/post.html', title=result_title, content=result_content, img_url=result_img,
+        return render_template('/guest/post.html', title=result_title, content=result_content,
                                                              id_postu=id_postu, data=data, login=login,  form=form)
     elif current_user.is_authenticated:
-        return render_template('/user/post.html', title=result_title, content=result_content, img_url=result_img,
+        return render_template('/user/post.html', title=result_title, content=result_content,
                            id_postu=id_postu, data=data, login=login,  form=form)
     else:
-        return render_template('/admin/post.html', title=result_title, content=result_content, img_url=result_img,
+        return render_template('/admin/post.html', title=result_title, content=result_content,
                                id_postu=id_postu, data=data, login=login, form=form)
 
 
@@ -434,8 +436,28 @@ def oserwisie():
     return render_template('/guest/oserwisie.html')
 
 @app.route('/upload', methods=['GET', 'POST'])
-def upload():
-    if request.method == 'POST' and 'photo' in request.files:
-        filename = photos.save(request.files['photo'])
-        return filename
-    return 'todziała'
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    '''
