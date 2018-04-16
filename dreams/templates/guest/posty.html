@@ -1,0 +1,39 @@
+{% extends "/guest/base.html" %}
+
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+
+
+    <div class="leftmenu">
+    <p>Działy:</p>
+    <ul>
+        <li><hr></li>
+
+    {% for row in data  %}
+        <li><a href="{{ '/' }}{{ row[1].replace(' ', '') }}">{{ row[1]}}</a><hr></li>
+
+    {% endfor %}
+    </ul>
+    </div>
+
+    <div class="middle">
+        {% for row in dat %}
+            <article>
+                <div class="responsive-blog-post">
+                <div class="individual-post">
+                    <h4><a href="{{ 'post' }}{{ '/' }}{{ row[0] }}">{{ row[1] }}</a></h4>
+                <img src="{{ row[3] }}">
+
+                {% set intro = row[2]|safe %}
+            <p class="intro"> {{ intro[:250] }}{{ '...' }}</p>
+
+            <a class="button" href="{{ 'post' }}{{ '/' }}{{ row[0] }}">Czytaj dalej</a>
+
+                </div>
+                </div>
+
+         </article>
+        {% endfor %}
+</div>
+{% endblock %}

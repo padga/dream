@@ -1,0 +1,35 @@
+{% extends "/admin/base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}Moje konto{% endblock %}
+
+{% block content %}
+    {% for row in data %}
+    <h1>Zmieniasz dane {{ row[2] }}!</h1>
+
+    <p>Twój login to: {{ row[1] }}</p>
+    <p>Twój e-mail: {{ row[4] }}</p>
+
+
+    <div class="profiler">
+    <h3>Zmiana Hasła</h3>
+
+    <form action="{{ url_for('changepassword') }}" method="post">
+    {{ err }}
+        {{ form.hidden_tag() }}
+        {{ render_field(form.password) }}
+        {{ render_field(form.password2) }}
+    <input type="submit">Zmień hasło!
+    </form>
+
+    <h3>Zmiana maila</h3>
+
+    <form action="{{ url_for('changemail') }}" method="post">
+    {{ err }}
+    {{ render_field(mail_form.new_email) }}
+    <input type="submit">Zmień maila!
+    </form>
+    </div>
+
+    <h2 class="forget"> <a href="{{ 'delete_user' }}{{ '/' }}{{ row[0] }}">Usuń konto z loginem {{ row[1] }}</a></h2>
+    {% endfor %}
+{% endblock %}

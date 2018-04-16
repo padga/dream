@@ -1,0 +1,55 @@
+{% extends "/guest/base.html" %}
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+
+<div class="ecommerce-hero-slider-small orbit" role="region" aria-label="Favorite Space Pictures" data-orbit>
+  <ul class="orbit-container">
+    <button class="orbit-previous"><span class="show-for-sr">Previous Slide</span>&#9664;&#xFE0E;</button>
+    <button class="orbit-next"><span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;</button>
+    <li class="is-active orbit-slide">
+      <img src="https://images.pexels.com/photos/900103/pexels-photo-900103.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260">
+
+    </li>
+    <li class="orbit-slide">
+      <div class="hero-slider-slide">
+          <img src="https://images.pexels.com/photos/877701/pexels-photo-877701.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260">
+      </div>
+    </li>
+
+  </ul>
+{#  <nav class="orbit-bullets">#}
+{#    <button class="is-active" data-slide="0"><span class="show-for-sr">First slide details.</span><span class="show-for-sr">Current Slide</span></button>#}
+{#    <button data-slide="1"><span class="show-for-sr">Second slide details.</span></button>#}
+{#    <button data-slide="2"><span class="show-for-sr">Third slide details.</span></button>#}
+{#  </nav>#}
+</div>
+
+     {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}{{ username }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+    {% endwith %}
+<div class="about">
+
+
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a posuere augue. Etiam porttitor luctus molestie.
+    Maecenas ac mauris varius, vehicula sapien at, vehicula est. Ut lacinia sed urna et aliquet. Morbi nisi lorem, porta
+    quis quam vitae, maximus congue nulla. Nam ultrices suscipit est et fringilla. Suspendisse potenti. Phasellus id
+    lacinia metus. Etiam rhoncus lacinia diam in tristique. Nulla vehicula metus eget dui porttitor ullamcorper. Sed
+    laoreet dictum molestie. Vivamus fermentum orci non euismod tincidunt. Quisque velit metus, porta sed augue a,
+    dapibus commodo justo. Sed cursus commodo justo. Quisque gravida ex et ligula tristique, non facilisis augue sodales.
+    Mauris rutrum et nisi at finibus.</p><p>Phasellus maximus, odio eget pulvinar gravida, elit lorem bibendum arcu, eu
+    auctor ligula odio eget lorem. Duis porta nulla ex. Duis feugiat elit eu justo venenatis, nec egestas dolor
+    dignissim. Fusce pretium, erat sit amet ultrices mattis, diam felis interdum purus, vel condimentum libero tortor
+    luctus mauris. Donec semper aliquam dolor, vitae tempor dui tempus quis. Morbi molestie turpis mi, at elementum ante
+    laoreet id. Donec eget libero ut orci euismod pretium. Nam semper felis est, at feugiat sem fermentum non. Donec a
+    orci in turpis finibus scelerisque. Maecenas blandit accumsan enim. Nulla enim sem, cursus et risus sed, faucibus
+    pretium massa. Nulla ac molestie elit, faucibus aliquam ex.</p>
+</div>
+
+{% endblock %}

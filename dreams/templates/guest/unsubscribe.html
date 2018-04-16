@@ -1,0 +1,23 @@
+{% extends "/guest/base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+
+{#    <div class="register">#}
+    <form class="register_form"  method="post"  action="{{ url_for('unsub') }}">
+    <h2 class="middle">Wypisz się z list subskrybentów</h2>
+
+
+                {{ err }}
+    {{ form.hidden_tag() }}
+    {{ render_field(form.email) }}
+
+    <button class="confirm">Usuń!</button>
+
+    </form>
+
+
+{#</div>#}
+
+{% endblock %}

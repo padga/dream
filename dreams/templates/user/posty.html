@@ -1,0 +1,36 @@
+{% extends "/user/base.html" %}
+
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+
+
+    <div class="leftmenu">
+    <p>Działy:</p>
+    <ul>
+        <li><hr></li>
+        <li>Historia<hr></li>
+
+        <li>Biologia<hr></li>
+        <li>Psychologia<hr></li>
+    </ul>
+    </div>
+
+    <div class="middle">
+        {% for row in data %}
+            <article>
+                <div class="responsive-blog-post">
+                <div class="individual-post">
+                    <h4><a href="{{ 'post' }}{{ '/' }}{{ row[0] }}">{{ row[1] }}</a></h4>
+                <img src="{{ row[3] }}">
+                    <p></p>
+            <p> {{ row[2]|safe }}</p>
+
+            <a class="button" href="{{ 'post' }}{{ '/' }}{{ row[0] }}">Read On</a>
+                </div>
+                </div>
+
+         </article>
+        {% endfor %}
+</div>
+{% endblock %}

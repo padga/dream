@@ -1,0 +1,29 @@
+{% extends "/guest/base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+    <div class="cont">
+<h1>Skontaktuj się ze mną</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+             {% for message in messages %}
+                 <li>{{ message }}</li>
+             {% endfor %}
+            </ul>
+    {% endif %}
+    {% endwith %}
+
+    <form class="contact-form" action="{{ url_for('send') }}" method="post">
+    {{ err }}
+    {{ form.hidden_tag() }}
+    {{ render_field(form.name) }}
+    {{ render_field(form.email) }}
+    {{ render_field(form.content, rows=10, cols=10) }}
+        <input class="button_cust" type="submit" value="Wyślij!">
+
+    </form>
+</div>
+{% endblock %}

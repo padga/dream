@@ -1,0 +1,24 @@
+{% extends "/guest/base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+
+{#    <div class="register">#}
+    <form class="register_form"  method="post"  action="{{ url_for('login') }}">
+    <h2 class="middle">Zaloguj się</h2>
+
+
+                {{ err }}
+    {{ form.hidden_tag() }}
+    {{ render_field(form.login) }}
+    {{ render_field(form.passwd) }}
+    {{ render_field(form.remember) }}
+    <button class="confirm">Zaloguj się!</button>
+        <p>Nie masz konta? <a href="{{ url_for('register') }}"> Zarejestruj się!</a></p>
+    </form>
+
+
+{#</div>#}
+
+{% endblock %}

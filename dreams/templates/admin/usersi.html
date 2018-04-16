@@ -1,0 +1,34 @@
+{% extends "/admin/base.html" %}
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+ <table>
+  <tr>
+
+    <th>login</th>
+    <th>Imię</th>
+
+      <th>email</th>
+      <th>Zmień dane</th>
+      <th>Usuń</th>
+
+  </tr>
+     {% for row in data %}
+  <tr>
+
+    <td>{{ row[1] }}</td>
+    <td>{{ row[2] }}</td>
+
+    <td>{{ row[4] }}</td>
+      <td><a href="{{'zmien_dane'}}{{ '/' }}{{ row[0] }}">Zmień dane użytkownika</a></td>
+      <td>
+          <form action="{{'delete_user'}}{{ '/' }}{{ row[0] }}">
+              <button onclick="button.onclick()" id="delete" value="Usuń użytkownika">Usuń użytkownika</button>
+          </form>
+      </td>
+
+  </tr>
+     {% endfor %}
+</table>
+
+{% endblock %}

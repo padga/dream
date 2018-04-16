@@ -1,0 +1,85 @@
+<!doctype html>
+<html class="no-js" lang="pl" dir="ltr">
+{% from "_formhelpers.html" import render_field %}
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Słodkich snów</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  </head>
+  <body>
+    <nav class="top-bar topbar-responsive">
+  <div class="top-bar-title">
+    <span data-responsive-toggle="topbar-responsive" data-hide-for="medium">
+      <button class="menu-icon" type="button" data-toggle></button>
+    </span>
+    <a class="topbar-responsive-logo" href="{{ url_for('index') }}"><strong>Słodkich snów</strong></a>
+  </div>
+  <div id="topbar-responsive" class="topbar-responsive-links">
+    <div class="top-bar-right">
+      <ul class="menu simple vertical medium-horizontal">
+
+        <li><a href="{{ url_for('posty') }}">Wszystkie wpisy</a></li>
+          <li><a href="{{ url_for('my_account') }}">Moje konto</a></li>
+          <li><a href="{{ url_for('logout') }}">Wyloguj</a></li>
+        <li><a href="{{ url_for('contact') }}">Kontakt</a></li>
+
+    </ul>
+
+    </div>
+  </div>
+</nav>
+              <header>
+      <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"></a>
+  </header>
+    <main>
+
+
+ <div id="content">{% block content %}{% endblock %}</div>
+
+    </main>
+
+<footer class="responsive-blog-footer">
+  <div class="row">
+    <div class="medium-8 columns small-order-2 medium-order-1 about-container">
+      <div class="row">
+        <div class="medium-8 columns about-section">
+          <h4> O serwisie</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a posuere augue. Etiam porttitor luctus
+              molestie. Maecenas ac mauris varius, vehicula sapien at, vehicula est. Ut lacinia sed urna et aliquet.
+              Morbi nisi lorem, porta quis quam vitae, maximus congue nulla. Nam ultrices suscipit est et fringilla.
+              Suspendisse potenti. Phasellus id lacinia metus. Etiam rhoncus lacinia diam in tristique. Nulla vehicula
+              metus eget dui porttitor ullamcorper. Sed laoreet dictum molestie..</p>
+
+        </div>
+      </div>
+    </div>
+    <div class="small-12 medium-4 columns small-order-1 medium-order-2 mailing-container">
+      <h4 class="mailing-list">Zapisz się na mój newsletter</h4>
+<form action="{{ url_for('subscribe') }}" method="post">
+          {{ err }}
+          {{ subscribe.hidden_tag() }}
+          {{ render_field(subscribe.name) }}
+          {{ render_field(subscribe.email) }}
+
+          <button class="button expanded subscribe-button">Zapisz się!</button>
+          <p>Chcesz wypisać się z newslettera? <a href="{{ url_for('wypisz') }}">Kliknij tutaj!</a></p>
+      </form>
+    </div>
+  </div>
+
+        <div class="creator">
+     <p> Patrycja Nowak. Praca licencjacka.</p>
+      </div>
+</footer>
+    <script src="{{ url_for('static', filename='js/vendor/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/what-input.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/foundation.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+  </body>
+</html>

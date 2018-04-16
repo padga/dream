@@ -1,0 +1,107 @@
+{% extends "/admin/base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}Strona główna{% endblock %}
+
+{% block content %}
+
+<div class="row expanded collapse">
+  <div class="column">
+    <div class="large-article-header">
+        <img src="{{ img_url }}">
+
+      <div class="large-article-header-content">
+
+          <div class="article-title">
+            <h1>{{ title }} </h1>
+          </div>
+          <div class="article-details">
+            <div class="article-author">
+
+              <a href="#">Patrycja Nowak</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="article">
+
+<h2> {{ title }}</h2>
+
+<p>{{ content|safe }}</p>
+
+<div class="blogpost-footer-actions">
+  <div class="blogpost-footer-actions-left">
+    <button><svg class="svgIcon-use" width="29" height="29" viewBox="0 0 29 29"><path d="M16.215 23.716c-.348.288-.984.826-1.376 1.158a.526.526 0 0 1-.68 0c-.36-.307-.92-.78-1.22-1.03C9.22 20.734 3 15.527 3 10.734 3 7.02 5.916 4 9.5 4c1.948 0 3.77.898 5 2.434C15.73 4.898 17.552 4 19.5 4c3.584 0 6.5 3.02 6.5 6.734 0 4.9-6.125 9.96-9.785 12.982zM19.5 5.2c-1.774 0-3.423.923-4.41 2.468a.699.699 0 0 1-.59.323.706.706 0 0 1-.59-.32c-.988-1.54-2.637-2.47-4.41-2.47-2.922 0-5.3 2.49-5.3 5.54 0 4.23 6.19 9.41 9.517 12.19.217.18.566.48.783.66l.952-.79c3.496-2.88 9.348-7.72 9.348-12.05 0-3.05-2.378-5.53-5.3-5.53z"></path></svg></button>
+    <button><svg class="svgIcon-use" width="29" height="29" viewBox="0 0 29 29">
+        <path d="M21.27 20.058c1.89-1.826 2.754-4.17 2.754-6.674C24.024 8.21 19.67 4 14.1 4 8.53 4 4 8.21 4 13.384c0 5.175 4.53 9.385 10.1 9.385 1.007 0 2-.14 2.95-.41.285.25.592.49.918.7 1.306.87 2.716 1.31 4.19 1.31.276-.01.494-.14.6-.36a.625.625 0 0 0-.052-.65c-.61-.84-1.042-1.71-1.282-2.58a5.417 5.417 0 0 1-.154-.75zm-3.85 1.324l-.083-.28-.388.12a9.72 9.72 0 0 1-2.85.424c-4.96 0-8.99-3.706-8.99-8.262 0-4.556 4.03-8.263 8.99-8.263 4.95 0 8.77 3.71 8.77 8.27 0 2.25-.75 4.35-2.5 5.92l-.24.21v.32c0 .07 0 .19.02.37.03.29.1.6.19.92.19.7.49 1.4.89 2.08-.93-.14-1.83-.49-2.67-1.06-.34-.22-.88-.48-1.16-.74z"></path></svg></button>
+  </div>
+
+</div>
+
+<div class="blogpost-footer-author-section">
+
+  <div>
+    <a href="#" class="blogpost-footer-author">
+
+      <div>
+        <p class="author">Patrycja Nowak</p>
+        <p class="bio">Jestem autorką powyższego artykułu.</p>
+      </div>
+    </a>
+  </div>
+</div>
+
+</div>
+    <div class="comments">
+    <h2>Komentarze</h2>
+
+
+<!-- comments -->
+        {% for row in data %}
+<div class="comment-section-container">
+
+  <div class="comment-section-author">
+
+    <div class="comment-section-name">
+      <h5>{{ login }}</h5>
+    </div>
+  </div>
+  <div class="comment-section-text">
+    <p>{{ row[1]|safe }}
+    </p>
+      <hr>
+  </div>
+</div>
+        {% endfor %}
+<!--/comments-->
+
+<!-- comment form -->
+    <div id="comment">
+<form class="comment-section-form" action="{{ id_postu }}{{ '/' }}{{ 'add' }}" , method="post">
+  <div class="comment-section-box">
+    <div class="row">
+      <div class="small-12 column">
+        <h4>Napisz komentarz</h4>
+            {{ form.hidden_tag() }}
+          {{ render_field(form.comment_content, rows=10, cols=20) }}
+
+{#          <textarea rows="10" type="text" placeholder="Wpisz komentarz" required></textarea>#}
+
+        <button class="button expanded">Skomentuj</button>
+{#          <input type="submit">DOdaj#}
+      </div>
+    </div>
+  </div>
+</form>
+    </div>
+<!--/comment box-->
+
+
+    </div>
+
+{% endblock %}
