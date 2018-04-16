@@ -5,6 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_login import LoginManager
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '/static/uploads'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 app = Flask(__name__)
@@ -21,6 +25,7 @@ login_manager.login_view = 'zaloguj'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:nowak123@localhost:3306/licencjat'
 app.config['SECRET_KEY'] = 'secretshit'
+app.config['UPLOAD_FOLDER'] = 'uploads'
 
 db = SQLAlchemy(app)
 
@@ -31,16 +36,6 @@ session = Session(bind=engine)
 SESSION_COOKIE_NAME = 'ciastko'
 SESSION_COOKIE_SECURE = True
 
-# app.config.update(dict(
-#     # DEBUG = True,
-#     MAIL_SERVER = 'smtp.gmail.com',
-#     MAIL_PORT = 587,
-#     MAIL_USE_TLS = True,
-#     MAIL_USE_SSL = False,
-#     MAIL_USERNAME = 'newsletterpatrycja@gmail.com',
-#     MAIL_PASSWORD = 'Pierre123$',
-#     MAIL_DEFAULT_SENDER=None
-# ))
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_USERNAME']='newsletterpatrycja@gmail.com'
 app.config['MAIL_PASSWORD']='Pierre123$'

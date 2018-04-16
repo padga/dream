@@ -1,10 +1,11 @@
-from flask import render_template, request, flash, redirect, url_for, session, logging, Blueprint, abort, g
-from dreams import app, bcrypt, database
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask import render_template, request, flash, redirect, url_for, session, abort
+from dreams import app, bcrypt, database, ALLOWED_EXTENSIONS
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from dreams import forms
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Message, Mail, Connection
+from flask_mail import Message, Mail
 import os
+from werkzeug.utils import secure_filename
 
 mail = Mail(app)
 db = SQLAlchemy(app)
@@ -12,6 +13,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 app.secret_key = os.urandom(24)
 
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -194,7 +199,7 @@ def category(category):
     db.engine.connect()
     print(category)
     query = 'SELECT * FROM articles where idcategory=%s ORDER BY id DESC'
-    query2 = 'SELECT idcategory from categories where trim(category_name)=%s '
+    query2 = 'SELECT idcategory from categories where (category_name)=%s '
     exc = db.engine.execute(query2, category)
     exc = exc.fetchone()
     res = db.engine.execute(query, exc)
@@ -217,8 +222,6 @@ def category(category):
 def post_id(id_postu):
     form = forms.CommentForm()
     db.engine.connect()
-
-
     title = 'SELECT title FROM articles WHERE id=%s'
     result_title = db.engine.execute(title, id_postu).scalar()
 
@@ -426,3 +429,31 @@ def zmien_dane(idUsers):
 @app.route('/o-serwisie')
 def oserwisie():
     return render_template('/guest/oserwisie.html')
+
+@app.route('/tes', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit a empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    '''
