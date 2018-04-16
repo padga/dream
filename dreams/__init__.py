@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_login import LoginManager
 from werkzeug.utils import secure_filename
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 UPLOAD_FOLDER = '/static/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -16,6 +17,10 @@ mail = Mail(app)
 bcrypt = Bcrypt(app)
 mail.init_app(app)
 
+photos = UploadSet('photos', IMAGES)
+
+app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
+configure_uploads(app, photos)
 
 login_manager = LoginManager()
 

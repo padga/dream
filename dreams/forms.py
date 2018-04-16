@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, TextAreaField, SelectField
+from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import InputRequired, Email, EqualTo, Length, ValidationError
 from flask_sqlalchemy import SQLAlchemy
 from dreams import app, database
@@ -92,7 +93,7 @@ class ArticleForm(FlaskForm):
     img_url = StringField('img_url', validators=[InputRequired(message="To pole nie może zostać puste!")])
     category = SelectField("Dział wpisu",
                            choices=[('joga i medytacja', 'Joga i medytacja'), ('filozofie szczęścia', 'filozofie szczęścia'), ('sen', 'sen'), ('psychologia', 'psychologia')])
-
+    image = FileField(validators=[FileRequired(message="Nie możesz dodać wpisu bez zdjęcia!")])
 
 class CommentForm(FlaskForm):
     comment_content = TextAreaField('comment_content', validators=[InputRequired(message="Komentarz musi mieć treść!")])
