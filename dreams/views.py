@@ -153,13 +153,19 @@ def posts():
     form = forms.ArticleForm()
     title = form.title.data
     content = form.content.data
-    path = form.image.data
+    file = request.files['file']
     category =form.category.data
+    # filename = secure_filename(file.filename)
+    # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    # path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    # print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     if form.validate():
-        file = request.files['image']
-        newFile = database.Photos(photoname=file.filename, data=file.read())
-        db.session.add(newFile)
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        newPhoto = database.Photos(path=path)
+        db.session.add(newPhoto)
         db.session.commit()
         phot = 'select idphoto from photos order by idphoto desc limit 1'
         idphoto = db.engine.execute(phot).scalar()
