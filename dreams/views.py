@@ -5,10 +5,6 @@ from dreams import forms
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Message, Mail
 import os
-from flask_uploads import UploadSet, configure_uploads, IMAGES
-from werkzeug.utils import secure_filename
-
-photos = UploadSet('photos', IMAGES)
 
 mail = Mail(app)
 db = SQLAlchemy(app)

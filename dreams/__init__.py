@@ -17,14 +17,14 @@ login_manager.init_app(app)
 login_manager.session_protection = "strong"
 login_manager.login_view = 'zaloguj'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:nowak123@localhost:3306/licencjat'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://15_nowak:asd123321@leszczyna.wzks.uj.edu.pl/15_nowak'
 app.config['SECRET_KEY'] = 'secretshit'
 
 
 db = SQLAlchemy(app)
 
 
-engine = create_engine("mysql+mysqldb://root:nowak123@localhost:3306/licencjat", echo=True, encoding='utf8')
+engine = create_engine("mysql+mysqldb://15_nowak:asd123321@leszczyna.wzks.uj.edu.pl/15_nowak", echo=True, encoding='utf8')
 Session = sessionmaker()
 session = Session(bind=engine)
 SESSION_COOKIE_NAME = 'ciastko'
