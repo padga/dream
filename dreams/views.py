@@ -1,9 +1,10 @@
-from flask import render_template, request, flash, redirect, url_for, session, abort
-from dreams import app, bcrypt, database
+from flask import render_template, request, flash, redirect, url_for, session, abort, send_from_directory
+from dreams import app, bcrypt, database, ALLOWED_EXTENSIONS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from dreams import forms
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Message, Mail
+from werkzeug.utils import secure_filename
 import os
 
 mail = Mail(app)
@@ -17,19 +18,22 @@ app.secret_key = os.urandom(24)
 def load_user(user_id):
     return database.Users.query.get(int(user_id))
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def index():
 
     if current_user.is_authenticated and current_user.if_admin == 1:
 
-        return render_template('/admin/index.html', username=current_user.username)
+        return render_template('admin/index.html', username=current_user.username)
 
     elif current_user.is_authenticated:
 
-        return render_template('/user/index.html', username=current_user.username)
+        return render_template('user/index.html', username=current_user.username)
     else:
-        return render_template('/guest/index.html')
+        return render_template('guest/index.html')
 
 
 @app.context_processor
@@ -149,7 +153,7 @@ def posts():
     form = forms.ArticleForm()
     title = form.title.data
     content = form.content.data
-    # url = form.img_url.data
+    path = form.image.data
     category =form.category.data
 
     if form.validate():
@@ -352,11 +356,14 @@ def changemail():
 
 @app.route('/panel')
 def panel():
-    db.engine.connect()
-    query = 'select * from users where idUsers > 1'
-    data = db.engine.execute(query).fetchall()
+    if current_user.is_anonymous or current_user.is_authenticated and current_user.if_admin ==0:
+        abort(401)
+    else:
+        db.engine.connect()
+        query = 'select * from users where idUsers > 1'
+        data = db.engine.execute(query).fetchall()
 
-    return render_template('/admin/usersi.html', data=data)
+        return render_template('admin/usersi.html', data=data)
 
 
 @app.route('/delete_user/<idUsers>')
@@ -431,3 +438,51 @@ def zmien_dane(idUsers):
 def oserwisie():
     return render_template('/guest/oserwisie.html')
 
+# @app.route('/test', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         # check if the post request has the file part
+#         if 'file' not in request.files:
+#             flash('No file part')
+#             return redirect(request.url)
+#         file = request.files['file']
+#         # if user does not select file, browser also
+#         # submit a empty part without filename
+#         if file.filename == '':
+#             flash('No selected file')
+#             return redirect(request.url)
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             return redirect(url_for('upload_file',
+#                                     filename=filename))
+#
+#     return render_template('guest/test.html')
+#
+#
+# @app.route('/uploads/<filename>')
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOAD_FOLDER'],
+#                                filename)
+
+
+@app.route("/testo", methods=['GET', 'POST'])
+def testo():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('index'))
+    return """
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    <p>%s</p>
+    """ % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'],))

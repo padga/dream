@@ -88,12 +88,11 @@ def unique_title(form, field):
 
 
 class ArticleForm(FlaskForm):
-    title = StringField('title', validators=[InputRequired(message="Nie możesz dodać wpisu bez tytułu"), unique_title])
-    content = TextAreaField('content', validators=[InputRequired(message="Nie możesz dodać wpisu bez treści!")])
-    # img_url = StringField('img_url', validators=[InputRequired(message="To pole nie może zostać puste!")])
+    title = StringField('Tytuł', validators=[InputRequired(message="Nie możesz dodać wpisu bez tytułu"), unique_title])
+    content = TextAreaField('Wpis', validators=[InputRequired(message="Nie możesz dodać wpisu bez treści!")])
     category = SelectField("Dział wpisu",
                            choices=[('joga i medytacja', 'Joga i medytacja'), ('filozofie szczęścia', 'filozofie szczęścia'), ('sen', 'sen'), ('psychologia', 'psychologia')])
-    image = FileField('image', validators=[FileRequired(message="Nie możesz dodać wpisu bez zdjęcia!")])
+    image = StringField('Zdjęcie', validators=[InputRequired(message="Nie możesz dodać wpisu bez zdjęcia!")])
 
 class CommentForm(FlaskForm):
     comment_content = TextAreaField('comment_content', validators=[InputRequired(message="Komentarz musi mieć treść!")])
