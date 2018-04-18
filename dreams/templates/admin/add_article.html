@@ -7,12 +7,11 @@
     <div class="post">
     <form  method="post"  action="{{ url_for('posts') }}" enctype="multipart/form-data">
         {{ err }}
-   {{ form.hidden_tag() }}
+    {{ form.hidden_tag() }}
     {{ render_field(form.title) }}
     {{ render_field(form.content,rows=10, cols=40) }}
-{#        {{ render_field(form.img_url) }}#}
-        {{ render_field(form.category) }}
-        {{ render_field(form.image) }}
+    {{ render_field(form.category) }}
+    {{ render_field(form.image) }}
 
         <button class="confirm">Dodaj wpis!</button>
     </form>

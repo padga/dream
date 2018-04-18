@@ -24,7 +24,7 @@
                     <h4><a href="{{ 'post' }}{{ '/' }}{{ row[0] }}">{{ row[1] }}</a></h4>
 {#                    <a class = "delete" href="{{'delete_post'}}{{ '/' }}{{ row[0] }}">Usuń wpis</a>#}
                     <p class="delete" onclick="p.onclick()" > Usuń</p>
-                    <img src="{{ row[3] }}">
+                    <img src="{{ row[6] }}">
 
                      {% set intro = row[2]|safe %}
             <p> {{ intro[:100] }}{{ '...' }}</p>

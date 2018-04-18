@@ -92,7 +92,7 @@ class ArticleForm(FlaskForm):
     content = TextAreaField('Wpis', validators=[InputRequired(message="Nie możesz dodać wpisu bez treści!")])
     category = SelectField("Dział wpisu",
                            choices=[('joga i medytacja', 'Joga i medytacja'), ('filozofie szczęścia', 'filozofie szczęścia'), ('sen', 'sen'), ('psychologia', 'psychologia')])
-    image = StringField('Zdjęcie', validators=[InputRequired(message="Nie możesz dodać wpisu bez zdjęcia!")])
+    image = FileField('Zdjęcie', validators=[InputRequired(message="Nie możesz dodać wpisu bez zdjęcia!")])
 
 class CommentForm(FlaskForm):
     comment_content = TextAreaField('comment_content', validators=[InputRequired(message="Komentarz musi mieć treść!")])

@@ -86,10 +86,8 @@ class Subscribers(db.Model):
 class Photos(db.Model):
     __tablename__ = 'photos'
     idphoto = db.Column('idphoto', db.Integer, primary_key=True, autoincrement=True)
-    photoname = db.Column('photoname', db.VARCHAR(300), nullable=False)
-    data = db.Column('data', db.LargeBinary, nullable=False)
+    photo = db.Column('photo', db.VARCHAR(100), nullable=False)
 
-    def __init__(self, photoname, data):
-        self.data = data
-        self.photoname = photoname
+    def __init__(self, photo):
+        self.photo = photo
 

@@ -153,18 +153,16 @@ def posts():
     form = forms.ArticleForm()
     title = form.title.data
     content = form.content.data
-    file = request.files['file']
+    # file = request.files['file']
+    file = form.image.data
     category =form.category.data
-    # filename = secure_filename(file.filename)
-    # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    # path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    # print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     if form.validate():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        newPhoto = database.Photos(path=path)
+        print(path)
+        newPhoto = database.Photos(photo=path)
         db.session.add(newPhoto)
         db.session.commit()
         phot = 'select idphoto from photos order by idphoto desc limit 1'
@@ -176,25 +174,24 @@ def posts():
         db.session.commit()
 
         return redirect(url_for('posty'), flash("Wpis dostał poprawnie dodany!"))
-
-
     else:
-        return render_template('/admin/add_article.html', form=form)
-
+          return render_template('admin/add_article.html', form=form)
 
 @app.route('/posty', methods=['POST', 'GET'])
 def posty():
     db.engine.connect()
-    query = 'SELECT * FROM articles ORDER BY id DESC '
+    query = 'SELECT * FROM articles join photos ORDER BY id DESC '
     result = db.engine.execute(query)
+
     res = result.fetchall()
+    print(res)
     query1 = 'SELECT * from categories'
     results = db.engine.execute(query1)
-    # tmp = result1.scalar()
+
 
     data = results.fetchall()
-    tmp = results.fetchone()
-    print(tmp)
+
+
     print(data)
 
     if current_user.is_authenticated and current_user.if_admin == 1:
@@ -444,51 +441,3 @@ def zmien_dane(idUsers):
 def oserwisie():
     return render_template('/guest/oserwisie.html')
 
-# @app.route('/test', methods=['GET', 'POST'])
-# def upload_file():
-#     if request.method == 'POST':
-#         # check if the post request has the file part
-#         if 'file' not in request.files:
-#             flash('No file part')
-#             return redirect(request.url)
-#         file = request.files['file']
-#         # if user does not select file, browser also
-#         # submit a empty part without filename
-#         if file.filename == '':
-#             flash('No selected file')
-#             return redirect(request.url)
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#             return redirect(url_for('upload_file',
-#                                     filename=filename))
-#
-#     return render_template('guest/test.html')
-#
-#
-# @app.route('/uploads/<filename>')
-# def uploaded_file(filename):
-#     return send_from_directory(app.config['UPLOAD_FOLDER'],
-#                                filename)
-
-
-@app.route("/testo", methods=['GET', 'POST'])
-def testo():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('index'))
-    return """
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    <p>%s</p>
-    """ % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'],))

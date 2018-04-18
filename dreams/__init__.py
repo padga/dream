@@ -37,7 +37,7 @@ app.config['MAIL_PORT']=587
 app.config['MAIL_USE_TLS' ]= True
 app.config['MAIL_DEFAULT_SENDER'] = 'Patrycja'
 
-UPLOAD_FOLDER = "dreams/static/uploads/"
+UPLOAD_FOLDER = "/~15_nowak/dreams/static/uploads/"
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
