@@ -30,11 +30,11 @@ session = Session(bind=engine)
 SESSION_COOKIE_NAME = 'ciastko'
 SESSION_COOKIE_SECURE = True
 
-app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_USERNAME']='newsletterpatrycja@gmail.com'
-app.config['MAIL_PASSWORD']='Pierre123$'
-app.config['MAIL_PORT']=587
-app.config['MAIL_USE_TLS' ]= True
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_USERNAME'] = 'newsletterpatrycja@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Pierre123$'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_DEFAULT_SENDER'] = 'Patrycja'
 
 UPLOAD_FOLDER = "/dreams/static/uploads/"
