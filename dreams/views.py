@@ -1,4 +1,4 @@
-from flask import render_template, request, flash, redirect, url_for, session, abort, send_from_directory
+from flask import render_template, request, flash, redirect, url_for, session, abort
 from dreams import app, bcrypt, database, ALLOWED_EXTENSIONS
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from dreams import forms
@@ -14,9 +14,6 @@ login_manager.init_app(app)
 app.secret_key = os.urandom(24)
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return database.Users.query.get(int(user_id))
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -145,7 +142,7 @@ def add_article():
     if current_user.is_anonymous or current_user.is_authenticated and current_user.if_admin ==0:
         abort(401)
     else:
-        return render_template('/admin/add_article.html', form=form)
+        return render_template('admin/add_article.html', form=form)
 
 
 @app.route('/posts', methods=['POST', 'GET'])
