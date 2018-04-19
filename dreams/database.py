@@ -52,7 +52,6 @@ class Article(db.Model):
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     title = db.Column('title', db.String(), nullable=False)
     content = db.Column('content', db.Text, nullable=False)
-    # img_url = db.Column('img_url', db.String(), nullable=False)
     comments = db.relationship('Comment', backref='comments')
     idcategory = db.Column('idcategory', db.Integer, db.ForeignKey('categories.idcategory'), nullable=False)
     idphoto = db.Column('idphoto', db.Integer, db.ForeignKey('photos.idphoto'))
@@ -60,7 +59,6 @@ class Article(db.Model):
     def __init__(self, title, content,  idcategory, idphoto):
         self.title = title
         self.content = content
-        # self.img_url =img_url
         self.idcategory = idcategory
         self.idphoto = idphoto
 
@@ -86,7 +84,8 @@ class Subscribers(db.Model):
 class Photos(db.Model):
     __tablename__ = 'photos'
     idphoto = db.Column('idphoto', db.Integer, primary_key=True, autoincrement=True)
-    photo = db.Column('photo', db.VARCHAR(100), nullable=False)
+    photo = db.Column('photo', db.VARCHAR(256), nullable=False)
+
 
     def __init__(self, photo):
         self.photo = photo

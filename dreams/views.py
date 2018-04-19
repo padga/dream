@@ -130,11 +130,6 @@ def login():
                 login_user(user)
                 flash("No witaj!")
                 return redirect(url_for('index'))
-            if current_user.if_admin ==0:
-                # return render_template('user/index.html')
-                return redirect(url_for('index'))
-            else:
-                return redirect(url_for('index'))
 
     return render_template('/guest/login.html', form=form)
 
@@ -153,13 +148,14 @@ def posts():
     form = forms.ArticleForm()
     title = form.title.data
     content = form.content.data
-    # file = request.files['file']
     file = form.image.data
     category =form.category.data
-
-    if form.validate() and file in ALLOWED_EXTENSIONS:
+    print(form.data)
+    filename = secure_filename(file.filename)
+    print(filename)
+    if form.validate:
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        path = file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         newPhoto = database.Photos(photo=filename)
         db.session.add(newPhoto)
         db.session.commit()
@@ -172,17 +168,19 @@ def posts():
         db.session.commit()
 
         return redirect(url_for('posty'), flash("Wpis dostał poprawnie dodany!"))
+
     else:
-          return render_template('admin/add_article.html', form=form)
+        print('cos jest nie halo')
+        return render_template('admin/add_article.html', form=form)
 
 @app.route('/posty', methods=['POST', 'GET'])
 def posty():
     db.engine.connect()
-    query = 'SELECT * FROM articles join photos ORDER BY id DESC '
+    query = 'select * from articles join photos where photos.idphoto = articles.idphoto order by id desc '
     result = db.engine.execute(query)
 
     res = result.fetchall()
-    print(res)
+    print("to jest res ", res)
     query1 = 'SELECT * from categories'
     results = db.engine.execute(query1)
 
