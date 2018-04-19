@@ -460,12 +460,9 @@ def sendnewsletter():
     if form.validate:
         for row in mails:
             name = row[1]
-            print(name)
             recipent = row[2]
-            print(recipent)
             news = Message(subject=name, body=content, recipients=[recipent])
-            print(news)
             mail.send(news)
-
+    flash("Newsletter został wysłany do wszystkich subskrybentów")
     return render_template('admin/newsletter.html', form=form)
 
