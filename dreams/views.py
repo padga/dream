@@ -160,9 +160,7 @@ def posts():
     if form.validate() and file in ALLOWED_EXTENSIONS:
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        print(path)
-        newPhoto = database.Photos(photo=path)
+        newPhoto = database.Photos(photo=filename)
         db.session.add(newPhoto)
         db.session.commit()
         phot = 'select idphoto from photos order by idphoto desc limit 1'
@@ -466,3 +464,8 @@ def sendnewsletter():
     flash("Newsletter został wysłany do wszystkich subskrybentów")
     return render_template('admin/newsletter.html', form=form)
 
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
