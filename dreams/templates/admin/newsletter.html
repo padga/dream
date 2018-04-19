@@ -1,0 +1,11 @@
+{% extends "/admin/base.html" %}
+{% block title %}Newslettery{% endblock %}
+
+{% block content %}
+<form class="middle" method="post" action="{{ url_for('sendnewsletter') }}">
+    {{ err }}
+    {{ render_field(form.title) }}
+  {{ render_field(form.newsletter,rows=10, cols=40) }}
+<button class="confirm">Wyślij newsletter!</button>
+</form>
+{% endblock %}

@@ -141,8 +141,12 @@ def unsub_email(form,field1):
 
 
 class Unsubscribe(FlaskForm):
-    email = StringField("", validators=[InputRequired(), Email(message="Podaj poprawny mail!"), unsub_email])
+    email = StringField("", validators=[InputRequired(message='To pole nie może być puste!'),
+                                        Email(message="Podaj poprawny mail!"), unsub_email])
 
+class NewsletterForm(FlaskForm):
+    title = StringField('Tytuł', validators=[InputRequired(message='Nie możesz wysłać newslettera bez treści!')])
+    newsletter = TextAreaField('Newsletter', validators=[InputRequired(message='Nie możesz wysłać pustego newslettera!')])
 
 
 

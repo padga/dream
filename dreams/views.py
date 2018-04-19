@@ -157,7 +157,7 @@ def posts():
     file = form.image.data
     category =form.category.data
 
-    if form.validate():
+    if form.validate() and file in ALLOWED_EXTENSIONS:
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
@@ -440,4 +440,26 @@ def zmien_dane(idUsers):
 @app.route('/o-serwisie')
 def oserwisie():
     return render_template('/guest/oserwisie.html')
+
+@app.route('/newsletter')
+def newsletter():
+    form = forms.NewsletterForm()
+    return render_template('admin/newsletter.html', form=form)
+
+
+
+@app.route('/sendnewsletter', methods=['POST'])
+def sendnewsletter():
+    form = forms.NewsletterForm()
+    db.engine.connect()
+    content = form.newsletter.data
+    title = form.title.data
+    query = 'SELECT email FROM subscribers'
+    tmp = db.engine.execute(query)
+    name = tmp.scalar()
+    print(name)
+    if form.validate:
+        newsletter= Message(subject=title, html=content)
+
+    return 'nie jest dobrze'
 
